@@ -72,8 +72,10 @@ const generateTable = (currentEp, solution) => {
     let thead = document.createElement('thead');
     let tbody = document.createElement('tbody');
     
-    table.appendChild(thead);
-    table.appendChild(tbody);
+    table.append(
+        thead,
+        tbody
+    );
     
     {
         let row = document.createElement('tr');
@@ -81,18 +83,20 @@ const generateTable = (currentEp, solution) => {
         let checkboxTh = document.createElement('th');
         
         let scoreTh = document.createElement('th');
-        scoreTh.innerHTML = 'Score range';
+        scoreTh.innerText = 'Score range';
         
         let epTh = document.createElement('th');
-        epTh.innerHTML = 'Ep gained';
+        epTh.innerText = 'Ep gained';
         
         let expectEpTh = document.createElement('th');
-        expectEpTh.innerHTML = 'Expected ep';
+        expectEpTh.innerText = 'Expected ep';
         
-        row.appendChild(checkboxTh);
-        row.appendChild(scoreTh);
-        row.appendChild(epTh);
-        row.appendChild(expectEpTh);
+        row.append(
+            checkboxTh,
+            scoreTh,
+            epTh,
+            expectEpTh
+        );
         
         thead.appendChild(row);
     }
@@ -109,18 +113,20 @@ const generateTable = (currentEp, solution) => {
         checkboxTd.appendChild(checkbox);
         
         let scoreTd = document.createElement('td');
-        scoreTd.innerHTML = `${score.toLocaleString()} ~ ${(score + 19999).toLocaleString()}`;
+        scoreTd.innerText = `${score.toLocaleString()} ~ ${(score + 19999).toLocaleString()}`;
         
         let epTd = document.createElement('td');
-        epTd.innerHTML = ep;
+        epTd.innerText = ep;
         
         let expectEpTd = document.createElement('td');
-        expectEpTd.innerHTML = epSum.toLocaleString();
+        expectEpTd.innerText = epSum.toLocaleString();
         
-        row.appendChild(checkboxTd);
-        row.appendChild(scoreTd);
-        row.appendChild(epTd);
-        row.appendChild(expectEpTd);
+        row.append(
+            checkboxTd,
+            scoreTd,
+            epTd,
+            expectEpTd
+        );
         
         tbody.appendChild(row);
     });
@@ -164,12 +170,26 @@ const formHandler = (e) => {
     
     const resultContainer = document.getElementById('result');
     resultContainer.innerHTML = '';
+
+    const resultHeader = document.createElement('h2');
+    resultHeader.innerText = 'Result';
+    resultContainer.appendChild(resultHeader);
     
     if (solution) {
+        const summaryPara = document.createElement('p');
+        summaryPara.innerText = `Requires ${solution.length} plays to achieve park.`;
+
         const table = generateTable(currentEp, solution);
-        resultContainer.appendChild(table);
+
+        resultContainer.append(
+            summaryPara,
+            table
+        );
     } else {
-        resultContainer.innerHTML = 'Unable to generate possible park.';
+        const summaryPara = document.createElement('p');
+        summaryPara.innerText = 'Unable to generate possible park.';
+
+        resultContainer.appendChild(summaryPara);
     }
     
     return false;
