@@ -21,7 +21,7 @@
         <h2>Calculator</h2>
         <noscript>This calculator requies JavaScript to run.</noscript>
         <form id="form">
-          <p>It is recommended to start calculating how to park when within 1000-2000 ep of the target ep. The greater the difference between the current ep and the target ep, the more room for error there is.</p>
+          <p>It is recommended to start calculating how to park when within 1,000 ~ 2,000 ep of the target ep. The greater the difference between the current ep and the target ep, the more room for player error there is.</p>
           <fieldset>
             <legend>Event points information</legend>
             <label for="current_ep">Current ep</label>
@@ -39,7 +39,7 @@
             <label for="max_ep">Max. ep per play</label>
             <input type="number" id="max_ep" name="max_ep" min="100" max="174" value="174" required>
           </fieldset>
-          <p><i>Warning: An ep difference of 50,000 or more may take a <b>very</b> long time to calculate.</i></p>
+          <p id="warning"><i>Warning: An ep difference of 50,000 or more may take a <b>very</b> long time to calculate.</i></p>
           <input type="submit" value="Calculate">
         </form>
       </section>

@@ -28,6 +28,11 @@ body {
   content: ':';
 }
 
+#warning {
+  border: 0.25em solid hsla(0, 70%, 56.9%, 0.9);
+  padding: 0.25em 0.5em;
+}
+
 #result {
   margin-top: 1.5em;
 }
