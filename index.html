@@ -4,38 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Parking Calculator</title>
-    <style>
-      #form fieldset {
-        display: grid;
-        grid-template-columns: 10em 7.5em;
-        grid-gap: 1em;
-      }
-
-      #form label {
-        text-align: right;
-      }
-
-      #form label:after {
-        content: ':';
-      }
-
-      #result {
-        margin-top: 2em;
-        overflow: auto;
-      }
-      
-      #result table th, #result table td {
-        padding: 0.5em 1em;
-        white-space: nowrap;
-      }
-    </style>
+    <title>Sekai Parking Calculator</title>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <h1>Parking Calculator v0.2.1</h1>
+    <h1>Parking Calculator v0.3.0</h1>
     <p>Calculates the number of plays and the scores and ep per play of 🦐 easy with 0x live bonus.</p>
-    <form id="form" onsubmit="return formHandler(this)">
+    <form id="form">
       <fieldset>
+        <legend>Ep information</legend>
         <label for="current_ep">Current ep</label>
         <input type="number" id="current_ep" name="current_ep" min="0" required>
         <label for="target_ep">Target ep</label>
@@ -43,217 +20,20 @@
       </fieldset>
       <br>
       <fieldset>
+        <legend>Play information</legend>
         <label for="event_bonus">Event bonus</label>
         <input type="number" id="event_bonus" name="event_bonus" min="0" value="0" required>
-      </fieldset>
-      <br>
-      <fieldset>
-        <label for="min_ep">Minimum ep per play</label>
+        <label for="min_ep">Min ep per play</label>
         <input type="number" id="min_ep" name="min_ep" min="100" max="174" value="100" required>
-        <label for="max_ep">Maximum ep per play</label>
+        <label for="max_ep">Max ep per play</label>
         <input type="number" id="max_ep" name="max_ep" min="100" max="174" value="174" required>
       </fieldset>
       <br>
       <input type="submit" value="Calculate">
     </form>
+    <noscript>This calculator requies JavaScript to run.</noscript>
     <div id="result"></div>
-    <script>
-        const scores = Array.from(Array(75).fill(0)).map((_, i) => i * 20000);
-
-        const bonusToScoresAndEps = {};
-
-        const calculateScoresAndEpsForBonus = (bonus) => {
-            const baseMultiplier = 100 * (1 + bonus / 100);
-            
-            return scores.map((score) => {
-                const ep = Math.floor(baseMultiplier * (1 + score /  2000000));
-                return {
-                    score,
-                    ep
-                };
-            });
-        };
-
-        const getScoresAndEpsForBonus = (bonus) => {
-            if (bonusToScoresAndEps[bonus]) return bonusToScoresAndEps[bonus];
-            
-            const scoreAndEp = calculateScoresAndEpsForBonus(bonus);
-            bonusToScoresAndEps[bonus] = scoreAndEp;
-            
-            return scoreAndEp;
-        };
-
-        const calculate = (targetVal, bonus, minEp, maxEp) => {
-            if (targetVal < minEp) return;
-            
-            const sols = Array(targetVal - minEp + 1).fill(undefined);
-            
-            const scoresAndEps = getScoresAndEpsForBonus(bonus);
-            
-            for (let i = minEp; i <= targetVal; i++) {
-                const solIdx = i - minEp; // shift index back
-                
-                for (let j = 0, scoresLen = scores.length; j < scoresLen; j++) {
-                    const scoreAndEp = scoresAndEps[j];
-                    const ep = scoreAndEp.ep;
-                    
-                    if (ep < minEp) continue; // skip if under min ep
-                    if (ep > maxEp) break; // stop if over max ep
-                    
-                    const difference = i - ep;
-                    
-                    if (difference < 0) break;
-                    
-                    if (difference === 0) {
-                        sols[solIdx] = [scoreAndEp];
-                        break;
-                    }
-                    
-                    const existingPathIdx = difference - minEp; // shift index back
-                    const existingPath = sols[existingPathIdx];
-                    
-                    if (existingPath) sols[solIdx] = [scoreAndEp, ...existingPath];
-                }
-                
-            }
-            
-            return sols[sols.length - 1];
-        };
-        
-        const isValidForm = ({ currentEp, targetEp, eventBonus, minEp, maxEp }) => {
-            if (minEp > targetEp - currentEp) return false;
-            if (minEp > maxEp) return false;
-            
-            return true;
-        }
-        
-        const generateTable = (currentEp, solution) => {
-            let table = document.createElement('table');
-            let thead = document.createElement('thead');
-            let tbody = document.createElement('tbody');
-            
-            table.border = "1";
-            table.appendChild(thead);
-            table.appendChild(tbody);
-            
-            {
-                let row = document.createElement('tr');
-                
-                let checkboxTh = document.createElement('th');
-                
-                let scoreTh = document.createElement('th');
-                scoreTh.innerHTML = 'Score range';
-                
-                let epTh = document.createElement('th');
-                epTh.innerHTML = 'Ep gained';
-                
-                let expectEpTh = document.createElement('th');
-                expectEpTh.innerHTML = 'Expected ep';
-                
-                row.appendChild(checkboxTh);
-                row.appendChild(scoreTh);
-                row.appendChild(epTh);
-                row.appendChild(expectEpTh);
-                
-                thead.appendChild(row);
-            }
-            
-            let epSum = currentEp;
-            solution.forEach(({ score, ep }) => {
-                epSum += ep;
-            
-                let row = document.createElement('tr');
-            
-                let checkboxTd = document.createElement('td');
-                let checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkboxTd.appendChild(checkbox);
-                
-                let scoreTd = document.createElement('td');
-                scoreTd.innerHTML = `${score.toLocaleString()} ~ ${(score + 19999).toLocaleString()}`;
-                
-                let epTd = document.createElement('td');
-                epTd.innerHTML = ep;
-                
-                let expectEpTd = document.createElement('td');
-                expectEpTd.innerHTML = epSum.toLocaleString();
-                
-                row.appendChild(checkboxTd);
-                row.appendChild(scoreTd);
-                row.appendChild(epTd);
-                row.appendChild(expectEpTd);
-                
-                tbody.appendChild(row);
-            });
-            
-            return table;
-        };
-        
-        const formHandler = (form) => {
-            const { elements } = form;
-            
-            const currentEp = parseInt(elements.current_ep.value);
-            const targetEp = parseInt(elements.target_ep.value);
-            
-            const eventBonus = parseInt(elements.event_bonus.value);
-            
-            const minEp = parseInt(elements.min_ep.value);
-            const maxEp = parseInt(elements.max_ep.value);
-            
-            const formData = {
-                currentEp,
-                targetEp,
-                eventBonus,
-                minEp,
-                maxEp
-            };
-            const isValid = isValidForm(formData);
-            
-            let solution;
-            
-            if (isValid) {
-                const startTime = performance.now();
-                solution = calculate(targetEp - currentEp, eventBonus, minEp, maxEp);
-                const endTime = performance.now();
-
-                console.log(formData, `${endTime - startTime} ms`);
-            } else {
-                console.log(formData);
-            }
-            
-            const resultContainer = document.getElementById('result');
-            resultContainer.innerHTML = '';
-            
-            if (solution) {
-                const table = generateTable(currentEp, solution);
-                resultContainer.appendChild(table);
-            } else {
-                resultContainer.innerHTML = 'Unable to generate possible park.';
-            }
-            
-            return false;
-        };
-        
-        document
-            .getElementById('event_bonus')
-            .addEventListener('change', (e) => {
-                const eventBonus = e.target.value;
-                
-                const scoresAndEps = getScoresAndEpsForBonus(eventBonus);
-                
-                const minEp = scoresAndEps[0].ep;
-                const maxEp = scoresAndEps[scoresAndEps.length - 1].ep
-                
-                const minEpInput = document.getElementById('min_ep');
-                minEpInput.value = Math.max(minEp, Math.min(minEpInput.value, maxEp)).toString();
-                minEpInput.min = minEp.toString();
-                minEpInput.max = maxEp.toString();
-                
-                const maxEpInput = document.getElementById('max_ep');
-                maxEpInput.value = Math.max(minEp, Math.min(maxEpInput.value, maxEp)).toString();
-                maxEpInput.min = minEp.toString();
-                maxEpInput.max = maxEp.toString();
-            });
+    <script type="text/javascript" src="script.js">
     </script>
   </body>
 </html>
