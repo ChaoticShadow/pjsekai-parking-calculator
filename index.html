@@ -6,6 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Parking Calculator</title>
     <style>
+      #form fieldset {
+        display: grid;
+        grid-template-columns: 10em 7.5em;
+        grid-gap: 1em;
+      }
+
+      #form label {
+        text-align: right;
+      }
+
+      #form label:after {
+        content: ':';
+      }
+
       #result {
         margin-top: 2em;
         overflow: auto;
@@ -18,26 +32,27 @@
     </style>
   </head>
   <body>
-    <h1>Parking Calculator v0.2</h1>
+    <h1>Parking Calculator v0.2.1</h1>
     <p>Calculates the number of plays and the scores and ep per play of 🦐 easy with 0x live bonus.</p>
-    <form onsubmit="return formHandler(this)">
-      <label for="current_ep">Current ep:</label><br>
-      <input type="number" id="current_ep" name="current_ep" min="0" required>
+    <form id="form" onsubmit="return formHandler(this)">
+      <fieldset>
+        <label for="current_ep">Current ep</label>
+        <input type="number" id="current_ep" name="current_ep" min="0" required>
+        <label for="target_ep">Target ep</label>
+        <input type="number" id="target_ep" name="target_ep" min="0" required>
+      </fieldset>
       <br>
-      <label for="target_ep">Target ep:</label><br>
-      <input type="number" id="target_ep" name="target_ep" min="0" required>
+      <fieldset>
+        <label for="event_bonus">Event bonus</label>
+        <input type="number" id="event_bonus" name="event_bonus" min="0" value="0" required>
+      </fieldset>
       <br>
-      <br>
-      <label for="event_bonus">Event bonus:</label><br>
-      <input type="number" id="event_bonus" name="event_bonus" min="0" value="0" required>
-      <br>
-      <br>
-      <label for="min_ep">Minimum ep per play:</label><br>
-      <input type="number" id="min_ep" name="min_ep" min="100" max="174" value="100" required>
-      <br>
-      <label for="max_ep">Maximum ep per play:</label><br>
-      <input type="number" id="max_ep" name="max_ep" min="100" max="174" value="174" required>
-      <br>
+      <fieldset>
+        <label for="min_ep">Minimum ep per play</label>
+        <input type="number" id="min_ep" name="min_ep" min="100" max="174" value="100" required>
+        <label for="max_ep">Maximum ep per play</label>
+        <input type="number" id="max_ep" name="max_ep" min="100" max="174" value="174" required>
+      </fieldset>
       <br>
       <input type="submit" value="Calculate">
     </form>
