@@ -137,6 +137,12 @@ const generateTable = (currentEp, solution) => {
 const formHandler = (e) => {
     e.preventDefault();
 
+    const resultSummary = document.getElementById('result-summary');
+    resultSummary.innerText = 'Calculating...';
+
+    const tableWrapper = document.getElementById('table-wrapper');
+    tableWrapper.innerHTML = '';
+
     const { elements } = e.target;
     
     const currentEp = parseInt(elements.current_ep.value);
@@ -168,31 +174,15 @@ const formHandler = (e) => {
         console.log(formData);
     }
     
-    const resultContainer = document.getElementById('result');
-    resultContainer.innerHTML = '';
-
-    const resultHeader = document.createElement('h2');
-    resultHeader.innerText = 'Result';
-    resultContainer.appendChild(resultHeader);
-    
     if (solution) {
-        const summaryPara = document.createElement('p');
-        summaryPara.innerText = `Requires ${solution.length} plays to achieve park.`;
+        resultSummary.innerText = `${solution.length} plays are required to achieve the desired park.`;
 
         const table = generateTable(currentEp, solution);
 
-        resultContainer.append(
-            summaryPara,
-            table
-        );
+        tableWrapper.appendChild(table);
     } else {
-        const summaryPara = document.createElement('p');
-        summaryPara.innerText = 'Unable to generate possible park.';
-
-        resultContainer.appendChild(summaryPara);
+        resultSummary.innerText = 'Unable to generate possible park.';
     }
-    
-    return false;
 };
 
 document.getElementById('form')

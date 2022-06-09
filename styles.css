@@ -30,6 +30,9 @@ body {
 
 #result {
   margin-top: 1.5em;
+}
+
+#result #table-wrapper {
   overflow: auto;
 }
 

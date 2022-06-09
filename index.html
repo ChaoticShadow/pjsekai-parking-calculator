@@ -14,33 +14,40 @@
   </head>
   <body>
     <div id="root">
-      <h1>Parking Calculator v0.3.2</h1>
+      <h1>Parking Calculator v0.3.3</h1>
       <p>Calculates the number of plays needed and the scores and event points (ep) per play of 🦐 easy with 0x live bonus.</p>
       <p>The spreadsheet with the song score, event bonus, and resulting ep can be found <a href="https://docs.google.com/spreadsheets/d/1om--O7_NqvvQ6TDg1jrsjKMVBR_s1j1o/htmlview">here</a>.</p>
-      <h2>Calculator</h2>
-      <form id="form">
-        <fieldset>
-          <legend>Event points information</legend>
-          <label for="current_ep">Current ep</label>
-          <input type="number" id="current_ep" name="current_ep" min="0" required>
-          <label for="target_ep">Target ep</label>
-          <input type="number" id="target_ep" name="target_ep" min="0" required>
-        </fieldset>
-        <p>Enter the event bonus of the team, and the minimum and maximum ep that is possible with that team. Note that changing the event bonus will change the range of allowed ep values.</p>
-        <fieldset>
-          <legend>Play information</legend>
-          <label for="event_bonus">Event bonus</label>
-          <input type="number" id="event_bonus" name="event_bonus" min="0" value="0" required>
-          <label for="min_ep">Min. ep per play</label>
-          <input type="number" id="min_ep" name="min_ep" min="100" max="174" value="100" required>
-          <label for="max_ep">Max. ep per play</label>
-          <input type="number" id="max_ep" name="max_ep" min="100" max="174" value="174" required>
-        </fieldset>
-        <br>
-        <input type="submit" value="Calculate">
-      </form>
-      <noscript>This calculator requies JavaScript to run.</noscript>
-      <div id="result"></div>
+      <section>
+        <h2>Calculator</h2>
+        <noscript>This calculator requies JavaScript to run.</noscript>
+        <form id="form">
+          <p>It is recommended to start calculating how to park when within 1000-2000 ep of the target ep. The greater the difference between the current ep and the target ep, the more room for error there is.</p>
+          <fieldset>
+            <legend>Event points information</legend>
+            <label for="current_ep">Current ep</label>
+            <input type="number" id="current_ep" name="current_ep" min="0" required>
+            <label for="target_ep">Target ep</label>
+            <input type="number" id="target_ep" name="target_ep" min="0" required>
+          </fieldset>
+          <p>Enter the event bonus of the team, and the minimum and maximum ep that is possible with that team. Note that changing the event bonus will change the range of allowed ep values.</p>
+          <fieldset>
+            <legend>Play information</legend>
+            <label for="event_bonus">Event bonus</label>
+            <input type="number" id="event_bonus" name="event_bonus" min="0" value="0" required>
+            <label for="min_ep">Min. ep per play</label>
+            <input type="number" id="min_ep" name="min_ep" min="100" max="174" value="100" required>
+            <label for="max_ep">Max. ep per play</label>
+            <input type="number" id="max_ep" name="max_ep" min="100" max="174" value="174" required>
+          </fieldset>
+          <p><i>Warning: An ep difference of 50,000 or more may take a <b>very</b> long time to calculate.</i></p>
+          <input type="submit" value="Calculate">
+        </form>
+      </section>
+      <section id="result">
+        <h2>Result</h2>
+        <p id="result-summary">N/A</p>
+        <div id="table-wrapper"></div>
+      </section>
     </div>
     <script type="text/javascript" src="script.js">
     </script>
