@@ -26,7 +26,9 @@ const getScoresAndEpsForBonus = (bonus) => {
 const calculate = (targetVal, bonus, minEp, maxEp) => {
     if (targetVal < minEp) return;
     
-    const sols = Array(targetVal - minEp + 1).fill(undefined);
+    const solutionLength = targetVal - minEp + 1;
+    const sol = Array(solutionLength).fill(undefined);
+    const solLengths = Array(solutionLength).fill(Number.POSITIVE_INFINITY);
     
     const scoresAndEps = getScoresAndEpsForBonus(bonus);
     
@@ -45,19 +47,26 @@ const calculate = (targetVal, bonus, minEp, maxEp) => {
             if (difference < 0) break;
             
             if (difference === 0) {
-                sols[solIdx] = [scoreAndEp];
+                sol[solIdx] = [scoreAndEp];
+                solLengths[solIdx] = 1;
                 break;
             }
             
             const existingPathIdx = difference - minEp; // shift index back
-            const existingPath = sols[existingPathIdx];
+            const existingPath = sol[existingPathIdx];
+            const existingPathLength = solLengths[existingPathIdx];
             
-            if (existingPath) sols[solIdx] = [scoreAndEp, ...existingPath];
+            if (existingPath) {
+                if (solLengths[solIdx] >= existingPathLength + 1) {
+                    sol[solIdx] = [scoreAndEp, ...existingPath];
+                    solLengths[solIdx] = existingPathLength + 1;
+                }
+            }
         }
         
     }
     
-    return sols[sols.length - 1];
+    return sol[solutionLength - 1];
 };
 
 const isValidForm = ({ currentEp, targetEp, eventBonus, minEp, maxEp }) => {
