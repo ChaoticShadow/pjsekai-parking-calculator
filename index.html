@@ -4,35 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="description" content="The Sekai Parking Calculator determines the number of plays and the score for each play in order to acheive the optimal park.">
+    <meta name="keywords" content="pjsekai, project, sekai, prsk, parking, calculator">
+
     <title>Sekai Parking Calculator</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <h1>Parking Calculator v0.3.0</h1>
-    <p>Calculates the number of plays and the scores and ep per play of 🦐 easy with 0x live bonus.</p>
-    <form id="form">
-      <fieldset>
-        <legend>Ep information</legend>
-        <label for="current_ep">Current ep</label>
-        <input type="number" id="current_ep" name="current_ep" min="0" required>
-        <label for="target_ep">Target ep</label>
-        <input type="number" id="target_ep" name="target_ep" min="0" required>
-      </fieldset>
-      <br>
-      <fieldset>
-        <legend>Play information</legend>
-        <label for="event_bonus">Event bonus</label>
-        <input type="number" id="event_bonus" name="event_bonus" min="0" value="0" required>
-        <label for="min_ep">Min ep per play</label>
-        <input type="number" id="min_ep" name="min_ep" min="100" max="174" value="100" required>
-        <label for="max_ep">Max ep per play</label>
-        <input type="number" id="max_ep" name="max_ep" min="100" max="174" value="174" required>
-      </fieldset>
-      <br>
-      <input type="submit" value="Calculate">
-    </form>
-    <noscript>This calculator requies JavaScript to run.</noscript>
-    <div id="result"></div>
+    <div id="root">
+      <h1>Parking Calculator v0.3.1</h1>
+      <p>Calculates the number of plays needed and the scores and event points (ep) per play of 🦐 easy with 0x live bonus.</p>
+      <p>The spreadsheet with the song score, event bonus, and resulting ep can be found <a href="https://docs.google.com/spreadsheets/d/1om--O7_NqvvQ6TDg1jrsjKMVBR_s1j1o/htmlview">here</a>.</p>
+      <h2>Calculator</h2>
+      <form id="form">
+        <fieldset>
+          <legend>Event points information</legend>
+          <label for="current_ep">Current ep</label>
+          <input type="number" id="current_ep" name="current_ep" min="0" required>
+          <label for="target_ep">Target ep</label>
+          <input type="number" id="target_ep" name="target_ep" min="0" required>
+        </fieldset>
+        <p>Enter the event bonus of the team, and the minimum and maximum ep that is possible with that team. Note that changing the event bonus will change the range of allowed ep values.</p>
+        <fieldset>
+          <legend>Play information</legend>
+          <label for="event_bonus">Event bonus</label>
+          <input type="number" id="event_bonus" name="event_bonus" min="0" value="0" required>
+          <label for="min_ep">Min. ep per play</label>
+          <input type="number" id="min_ep" name="min_ep" min="100" max="174" value="100" required>
+          <label for="max_ep">Max. ep per play</label>
+          <input type="number" id="max_ep" name="max_ep" min="100" max="174" value="174" required>
+        </fieldset>
+        <br>
+        <input type="submit" value="Calculate">
+      </form>
+      <noscript>This calculator requies JavaScript to run.</noscript>
+      <div id="result"></div>
+    </div>
     <script type="text/javascript" src="script.js">
     </script>
   </body>
