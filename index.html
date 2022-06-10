@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <meta name="description" content="The Sekai Parking Calculator determines the number of plays and the score for each play in order to acheive the optimal park.">
     <meta name="keywords" content="pjsekai, project, sekai, prsk, parking, calculator">
 
-    <title>Sekai Parking Calculator</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="styles.css">
+
+    <title>Sekai Parking Calculator</title>
+    <link rel="stylesheet" tye="text/css" href="styles.css">
   </head>
   <body>
-    <div id="root">
-      <h1>Parking Calculator v0.4.1</h1>
-      <p>Calculates the number of plays needed and the scores and event points (ep) per play of 🦐 easy with 0x live bonus.</p>
+    <main>
+      <h1>Parking Calculator</h1>
+      <p>Calculates the number of plays needed and the scores and event points (ep) per play of 🦐 with 0x live bonus.</p>
       <p>The spreadsheet with the song score, event bonus, and resulting ep can be found <a href="https://docs.google.com/spreadsheets/d/1om--O7_NqvvQ6TDg1jrsjKMVBR_s1j1o/htmlview">here</a>.</p>
       <section>
         <h2>Calculator</h2>
-        <noscript><p class="alert error">This calculator requires JavaScript to run.</p></noscript>
+        <noscript>
+          <p class="alert error"><em>This calculator requires JavaScript to run.</em></p>
+        </noscript>
         <form id="form">
           <p>It is recommended to start calculating how to park when within 1,000 ~ 2,000 ep of the target ep. The greater the difference between the current ep and the target ep, the more room for player error there is.</p>
           <fieldset>
@@ -39,7 +42,7 @@
             <label for="max_ep">Max. ep per play</label>
             <input type="number" id="max_ep" name="max_ep" min="100" max="174" value="174" required>
           </fieldset>
-          <p class="alert warning">Warning: An ep difference of 25,000 or more may take a <b>very</b> long time to calculate.</p>
+          <p class="alert warning"><em>Warning: An ep difference of 25,000 or more may take a <strong>very</strong> long time to calculate.</em></p>
           <input type="submit" value="Calculate">
         </form>
       </section>
@@ -48,8 +51,11 @@
         <p id="result-summary">N/A</p>
         <div id="table-wrapper"></div>
       </section>
-    </div>
-    <script type="text/javascript" src="script.js">
-    </script>
+    </main>
+    <footer>
+      <p>v0.4.1</p>
+      <p><a href="https://github.com/ChaoticShadow/pjsekai-parking-calculator">View source on GitHub</a></p>
+    </footer>
+    <script type="text/javascript" src="script.js"></script>
   </body>
 </html>
