@@ -10,6 +10,24 @@ body {
   margin: auto;
 }
 
+.alert {
+  padding: 0.25em 0.5em;
+  font-style: italic;
+}
+
+.error {
+  border: 0.25em solid hsla(0, 70%, 56.9%, 0.9);
+  background-color: hsla(0, 70%, 56.9%, 0.1);
+}
+
+.warning {
+  border: 0.25em solid hsla(47.1, 100%, 53.3%, 0.9);
+  background-color: hsla(47.1, 100%, 53.3%, 0.1);
+}
+
+/*
+ * Form
+ */
 #form fieldset {
   display: grid;
   grid-template-columns: 8em 9em;
@@ -28,11 +46,9 @@ body {
   content: ':';
 }
 
-#warning {
-  border: 0.25em solid hsla(0, 70%, 56.9%, 0.9);
-  padding: 0.25em 0.5em;
-}
-
+/*
+ * Result
+ */
 #result {
   margin-top: 1.5em;
 }
