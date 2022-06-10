@@ -1,5 +1,23 @@
 // "use strict";
 
+class SolutionNode {
+    scoreAndEp;
+    prevNode;
+    length;
+
+    constructor(scoreAndEp, prevNode, length) {
+        this.scoreAndEp = scoreAndEp;
+        this.prevNode = prevNode;
+        this.length = length;
+    }
+
+    valueOf() {
+        if (this.prevNode) return [this.scoreAndEp, ...this.prevNode.valueOf()];
+
+        return [this.scoreAndEp];
+    }
+}
+
 const scores = Array.from(Array(75).fill(0)).map((_, i) => i * 20000);
 
 const bonusToScoresAndEps = {};
@@ -30,7 +48,6 @@ const calculate = (targetVal, bonus, minEp, maxEp) => {
     
     const solutionLength = targetVal - minEp + 1;
     const sol = Array(solutionLength).fill(undefined);
-    const solLengths = Array(solutionLength).fill(Number.POSITIVE_INFINITY);
     
     const scoresAndEps = getScoresAndEpsForBonus(bonus);
     
@@ -53,26 +70,24 @@ const calculate = (targetVal, bonus, minEp, maxEp) => {
             if (difference < 0) break;
             
             if (difference === 0) {
-                sol[solIdx] = [scoreAndEp];
-                solLengths[solIdx] = 1;
+                sol[solIdx] = new SolutionNode(scoreAndEp, null, 1);
                 break;
             }
             
             const existingPathIdx = difference - minEp; // shift index back
             const existingPath = sol[existingPathIdx];
-            const existingPathLength = solLengths[existingPathIdx];
-            
-            if (existingPath) {
-                if (solLengths[solIdx] >= existingPathLength + 1) {
-                    sol[solIdx] = [scoreAndEp, ...existingPath];
-                    solLengths[solIdx] = existingPathLength + 1;
-                }
+
+            if (existingPath == null) continue; // skip if not possible
+
+            const currentSol = sol[solIdx];
+
+            if (currentSol == null || currentSol.length >= existingPath.length + 1) {
+                sol[solIdx] = new SolutionNode(scoreAndEp, existingPath, existingPath.length + 1);
             }
         }
-        
     }
     
-    return sol[solutionLength - 1];
+    return sol[solutionLength - 1].valueOf();
 };
 
 const isValidForm = ({ currentEp, targetEp, eventBonus, minEp, maxEp }) => {
