@@ -140,6 +140,13 @@ const generateTable = (currentEp, solution) => {
         let checkboxTd = document.createElement('td');
         let checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
+        checkbox.addEventListener('change', (e) => {
+            if (checkbox.checked) {
+                row.classList.add('checked');
+            } else {
+                row.classList.remove('checked');
+            }
+        });
         checkboxTd.appendChild(checkbox);
         
         let scoreTd = document.createElement('td');
@@ -190,6 +197,7 @@ const formHandler = (e) => {
         minEp,
         maxEp
     };
+    
     const isValid = isValidForm(formData);
     
     let solution;
@@ -218,8 +226,7 @@ const formHandler = (e) => {
 document.getElementById('form')
     .addEventListener('submit', formHandler);
 
-document
-    .getElementById('event_bonus')
+document.getElementById('event_bonus')
     .addEventListener('change', (e) => {
         const eventBonus = e.target.value;
         

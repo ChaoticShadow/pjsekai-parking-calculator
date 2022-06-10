@@ -70,18 +70,22 @@ footer {
   border: 1px solid #ddd;
 }
 
-#result table thead tr {
+#result th,
+#result td {
+  padding: 0.5em 0.75em;
+  white-space: nowrap;
+}
+
+#result thead tr {
   border: 1px solid #ddd;
 }
 
-#result table tbody tr:nth-child(odd) {
+#result tbody tr:nth-child(odd) {
   background-color: hsla(0, 0%, 0%, 0.05);
 }
 
-#result table th,
-#result table td {
-  padding: 0.5em 1em;
-  white-space: nowrap;
+#result tbody tr.checked {
+  opacity: 0.5;
 }
 
 #result tbody tr:last-child td:last-child {
