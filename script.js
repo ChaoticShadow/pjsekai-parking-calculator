@@ -1,3 +1,5 @@
+// "use strict";
+
 const scores = Array.from(Array(75).fill(0)).map((_, i) => i * 20000);
 
 const bonusToScoresAndEps = {};
@@ -32,18 +34,22 @@ const calculate = (targetVal, bonus, minEp, maxEp) => {
     
     const scoresAndEps = getScoresAndEpsForBonus(bonus);
     
+    let minEpIdx, maxEpIdx;
+    for (let i = 0, scoreAndEpsLength = scoresAndEps.length; i < scoreAndEpsLength; i++) {
+        const { ep } = scoresAndEps[i];
+        if (ep === minEp) minEpIdx = i;
+        if (ep === maxEp) maxEpIdx = i;
+    }
+
     for (let i = minEp; i <= targetVal; i++) {
         const solIdx = i - minEp; // shift index back
         
-        for (let j = 0, scoresLen = scores.length; j < scoresLen; j++) {
+        for (let j = minEpIdx; j <= maxEpIdx; j++) {
             const scoreAndEp = scoresAndEps[j];
             const ep = scoreAndEp.ep;
             
-            if (ep < minEp) continue; // skip if under min ep
-            if (ep > maxEp) break; // stop if over max ep
-            
             const difference = i - ep;
-            
+
             if (difference < 0) break;
             
             if (difference === 0) {
