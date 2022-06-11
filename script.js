@@ -43,20 +43,27 @@ const getScoresAndEpsForBonus = (bonus) => {
     return scoreAndEp;
 };
 
+const getMinMaxEpIndexes = (scoresAndEps, minEp, maxEp) => {
+    let minMaxIdx = {
+        min: -1,
+        max: -1
+    };
+
+    for (let i = 0, scoreAndEpsLength = scoresAndEps.length; i < scoreAndEpsLength; i++) {
+        const { ep } = scoresAndEps[i];
+        if (ep === minEp) minMaxIdx.min = i;
+        if (ep === maxEp) minMaxIdx.max = i;
+    }
+
+    return minMaxIdx;
+}
+
 const calculate = (targetVal, bonus, minEp, maxEp) => {
-    if (targetVal < minEp) return;
-    
     const solutionLength = targetVal - minEp + 1;
     const sol = Array(solutionLength).fill(undefined);
     
     const scoresAndEps = getScoresAndEpsForBonus(bonus);
-    
-    let minEpIdx, maxEpIdx;
-    for (let i = 0, scoreAndEpsLength = scoresAndEps.length; i < scoreAndEpsLength; i++) {
-        const { ep } = scoresAndEps[i];
-        if (ep === minEp) minEpIdx = i;
-        if (ep === maxEp) maxEpIdx = i;
-    }
+    const { min: minEpIdx, max: maxEpIdx } = getMinMaxEpIndexes(scoresAndEps, minEp, maxEp);
 
     for (let i = minEp; i <= targetVal; i++) {
         const solIdx = i - minEp; // shift index back
@@ -91,10 +98,16 @@ const calculate = (targetVal, bonus, minEp, maxEp) => {
 };
 
 const isValidForm = ({ currentEp, targetEp, eventBonus, minEp, maxEp }) => {
-    if (minEp > targetEp - currentEp) return false;
-    if (minEp > maxEp) return false;
+    if (minEp > targetEp - currentEp) return { isValid: false, reason: "Difference between current and target ep is less than min ep." };
+    if (minEp > maxEp) return { isValid: false, reason: "Min ep is greater than max ep." };
+
+    const scoresAndEps = getScoresAndEpsForBonus(eventBonus);
+    const { min: minEpIdx, max: maxEpIdx } = getMinMaxEpIndexes(scoresAndEps, minEp, maxEp);
     
-    return true;
+    if (minEpIdx === -1) return { isValid: false, reason: "Invalid min ep for the given event bonus." };
+    if (maxEpIdx === -1) return { isValid: false, reason: "Invalid max ep for the given event bonus." };
+
+    return { isValid: true, reason: "" };
 }
 
 const generateTable = (currentEp, solution) => {
@@ -175,7 +188,10 @@ const formHandler = (e) => {
     e.preventDefault();
 
     const resultSummary = document.getElementById('result-summary');
-    resultSummary.innerText = 'Calculating...';
+    resultSummary.innerText = '';
+
+    const inputErrorWrapper = document.getElementById('input-error-wrapper');
+    inputErrorWrapper.style.display = 'none';
 
     const tableWrapper = document.getElementById('table-wrapper');
     tableWrapper.innerHTML = '';
@@ -197,29 +213,32 @@ const formHandler = (e) => {
         minEp,
         maxEp
     };
-    
-    const isValid = isValidForm(formData);
-    
-    let solution;
-    
-    if (isValid) {
+
+    const { isValid, reason } = isValidForm(formData);
+
+    if (!isValid) {
+        console.log(formData, reason);
+
+        inputErrorWrapper.querySelector('#input-error-msg').innerText = reason;
+        inputErrorWrapper.style.display = 'block';
+    } else {  
+        resultSummary.innerText = 'Calculating...';
+
         const startTime = performance.now();
-        solution = calculate(targetEp - currentEp, eventBonus, minEp, maxEp);
+        const solution = calculate(targetEp - currentEp, eventBonus, minEp, maxEp);
         const endTime = performance.now();
 
         console.log(formData, `${endTime - startTime} ms`);
-    } else {
-        console.log(formData);
-    }
-    
-    if (solution) {
-        resultSummary.innerText = `${solution.length} plays are required to achieve the desired park.`;
+        
+        if (solution) {
+            resultSummary.innerText = `${solution.length} plays are required to achieve the desired park.`;
 
-        const table = generateTable(currentEp, solution);
+            const table = generateTable(currentEp, solution);
 
-        tableWrapper.appendChild(table);
-    } else {
-        resultSummary.innerText = 'Unable to generate possible park.';
+            tableWrapper.appendChild(table);
+        } else {
+            resultSummary.innerText = 'Unable to generate possible park.';
+        }
     }
 };
 
